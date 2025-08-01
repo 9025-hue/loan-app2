@@ -16,6 +16,9 @@
             background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
             min-height: 100vh;
             padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
         }
 
         .container {
@@ -27,6 +30,30 @@
             overflow: hidden;
         }
 
+        .login-container, .register-container {
+            background: white;
+            padding: 40px;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+            width: 90%;
+            max-width: 400px;
+            text-align: center;
+        }
+
+        .login-container h2, .register-container h2 {
+            margin-bottom: 20px;
+            color: #2c3e50;
+        }
+
+        .login-container .form-group, .register-container .form-group {
+            text-align: left;
+        }
+
+        .login-container .btn, .register-container .btn {
+            width: 100%;
+            margin-top: 15px;
+        }
+        
         .header {
             background: linear-gradient(135deg, #2c3e50, #3498db);
             color: white;
@@ -129,6 +156,23 @@
 
         .btn-warning {
             background: linear-gradient(135deg, #f39c12, #d68910);
+        }
+
+        .btn-logout {
+            background: linear-gradient(135deg, #95a5a6, #7f8c8d);
+        }
+        
+        .switch-link {
+            display: block;
+            margin-top: 15px;
+            color: #3498db;
+            text-decoration: none;
+            font-weight: 500;
+            transition: color 0.3s ease;
+        }
+
+        .switch-link:hover {
+            color: #2980b9;
         }
 
         .card {
@@ -295,6 +339,10 @@
             color: #000;
         }
 
+        .hidden {
+            display: none !important;
+        }
+
         @media (max-width: 768px) {
             .nav {
                 flex-direction: column;
@@ -315,24 +363,60 @@
     </style>
 </head>
 <body>
-    <div class="container">
+    <div id="login-container" class="login-container">
+        <h2>Loan Management System</h2>
+        <form id="loginForm">
+            <div class="form-group">
+                <label for="username">Username</label>
+                <input type="text" id="username" required>
+            </div>
+            <div class="form-group">
+                <label for="password">Password</label>
+                <input type="password" id="password" required>
+            </div>
+            <button type="submit" class="btn">Login</button>
+        </form>
+        <a href="#" class="switch-link" onclick="showRegister()">Don't have an account? Register here</a>
+    </div>
+
+    <div id="register-container" class="register-container hidden">
+        <h2>Register New Account</h2>
+        <form id="registerForm">
+            <div class="form-group">
+                <label for="reg-username">Username</label>
+                <input type="text" id="reg-username" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-password">Password</label>
+                <input type="password" id="reg-password" required>
+            </div>
+            <div class="form-group">
+                <label for="reg-confirm-password">Confirm Password</label>
+                <input type="password" id="reg-confirm-password" required>
+            </div>
+            <button type="submit" class="btn">Register</button>
+        </form>
+        <a href="#" class="switch-link" onclick="showLogin()">Already have an account? Login here</a>
+    </div>
+
+    <div id="main-app" class="container hidden">
         <div class="header">
             <h1>💰 Loan Management System</h1>
             <p>Complete financial management for your lending business</p>
         </div>
 
         <nav class="nav">
-            <button class="nav-btn active" onclick="showSection('dashboard')">📊 Dashboard</button>
-            <button class="nav-btn" onclick="showSection('loans')">💼 Loans</button>
-            <button class="nav-btn" onclick="showSection('income')">💰 Income</button>
-            <button class="nav-btn" onclick="showSection('expenses')">💸 Expenses</button>
-            <button class="nav-btn" onclick="showSection('transactions')">📋 Transactions</button>
-            <button class="nav-btn" onclick="showSection('reports')">📈 Reports</button>
-            <button class="nav-btn" onclick="showSection('clients')">👥 Clients</button>
+            <button class="nav-btn active" onclick="showSection('dashboard', this)">📊 Dashboard</button>
+            <button class="nav-btn" onclick="showSection('loans', this)">💼 Loans</button>
+            <button class="nav-btn" onclick="showSection('income', this)">💰 Income</button>
+            <button class="nav-btn" onclick="showSection('expenses', this)">💸 Expenses</button>
+            <button class="nav-btn" onclick="showSection('transactions', this)">📋 Transactions</button>
+            <button class="nav-btn" onclick="showSection('reports', this)">📈 Reports</button>
+            <button class="nav-btn" onclick="showSection('clients', this)">👥 Clients</button>
+            <button class="nav-btn btn-logout" onclick="logout()">🚪 Logout</button>
         </nav>
 
         <div class="content">
-            <!-- Dashboard Section -->
             <section id="dashboard" class="section active">
                 <h2>Dashboard Overview</h2>
                 <div class="stats-grid">
@@ -367,7 +451,6 @@
                 </div>
             </section>
 
-            <!-- Loans Section -->
             <section id="loans" class="section">
                 <h2>Loan Management</h2>
                 
@@ -410,7 +493,6 @@
                 </table>
             </section>
 
-            <!-- Income Section -->
             <section id="income" class="section">
                 <h2>Income Management</h2>
                 
@@ -454,7 +536,6 @@
                 </table>
             </section>
 
-            <!-- Expenses Section -->
             <section id="expenses" class="section">
                 <h2>Expense Management</h2>
                 
@@ -500,7 +581,6 @@
                 </table>
             </section>
 
-            <!-- Transactions Section -->
             <section id="transactions" class="section">
                 <h2>All Transactions</h2>
                 
@@ -546,7 +626,6 @@
                 </table>
             </section>
 
-            <!-- Reports Section -->
             <section id="reports" class="section">
                 <h2>Reports & Analytics</h2>
                 
@@ -592,7 +671,6 @@
                 </div>
             </section>
 
-            <!-- Clients Section -->
             <section id="clients" class="section">
                 <h2>Client Management</h2>
                 
@@ -626,8 +704,6 @@
         </div>
     </div>
 
-    <!-- Modals -->
-    <!-- Loan Modal -->
     <div id="loanModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('loanModal')">&times;</span>
@@ -679,7 +755,6 @@
         </div>
     </div>
 
-    <!-- Income Modal -->
     <div id="incomeModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('incomeModal')">&times;</span>
@@ -712,7 +787,6 @@
         </div>
     </div>
 
-    <!-- Expense Modal -->
     <div id="expenseModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('expenseModal')">&times;</span>
@@ -747,7 +821,6 @@
         </div>
     </div>
 
-    <!-- Client Modal -->
     <div id="clientModal" class="modal">
         <div class="modal-content">
             <span class="close" onclick="closeModal('clientModal')">&times;</span>
@@ -788,15 +861,88 @@
 
     <script>
         // Data Storage
+        let users = JSON.parse(localStorage.getItem('users')) || [];
         let loans = JSON.parse(localStorage.getItem('loans')) || [];
         let income = JSON.parse(localStorage.getItem('income')) || [];
         let expenses = JSON.parse(localStorage.getItem('expenses')) || [];
         let clients = JSON.parse(localStorage.getItem('clients')) || [];
 
-        // Initialize the app
+        // Check for a default admin user and create one if it doesn't exist
+        if (users.length === 0) {
+            users.push({ username: 'admin', password: 'password' });
+            localStorage.setItem('users', JSON.stringify(users));
+        }
+
+        // Authentication and Initialization
         document.addEventListener('DOMContentLoaded', function() {
-            initializeApp();
+            showLogin();
         });
+
+        document.getElementById('loginForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            login();
+        });
+
+        document.getElementById('registerForm').addEventListener('submit', function(e) {
+            e.preventDefault();
+            register();
+        });
+
+        function showLogin() {
+            document.getElementById('login-container').classList.remove('hidden');
+            document.getElementById('register-container').classList.add('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+        }
+
+        function showRegister() {
+            document.getElementById('register-container').classList.remove('hidden');
+            document.getElementById('login-container').classList.add('hidden');
+            document.getElementById('main-app').classList.add('hidden');
+        }
+
+        function login() {
+            const username = document.getElementById('username').value;
+            const password = document.getElementById('password').value;
+
+            const user = users.find(u => u.username === username && u.password === password);
+
+            if (user) {
+                document.getElementById('login-container').classList.add('hidden');
+                document.getElementById('main-app').classList.remove('hidden');
+                initializeApp();
+            } else {
+                alert('Invalid username or password.');
+            }
+        }
+
+        function register() {
+            const username = document.getElementById('reg-username').value;
+            const password = document.getElementById('reg-password').value;
+            const confirmPassword = document.getElementById('reg-confirm-password').value;
+
+            if (password !== confirmPassword) {
+                alert('Passwords do not match.');
+                return;
+            }
+
+            if (users.find(u => u.username === username)) {
+                alert('Username already exists. Please choose another one.');
+                return;
+            }
+
+            const newUser = { username, password };
+            users.push(newUser);
+            localStorage.setItem('users', JSON.stringify(users));
+            alert('Registration successful! You can now log in.');
+            document.getElementById('registerForm').reset();
+            showLogin();
+        }
+
+        function logout() {
+            if (confirm('Are you sure you want to log out?')) {
+                showLogin();
+            }
+        }
 
         function initializeApp() {
             updateDashboard();
@@ -807,10 +953,11 @@
             renderTransactions();
             renderClients();
             setupCharts();
+            document.querySelector('.nav-btn').classList.add('active');
         }
-
+        
         // Navigation
-        function showSection(sectionId) {
+        function showSection(sectionId, element) {
             document.querySelectorAll('.section').forEach(section => {
                 section.classList.remove('active');
             });
@@ -819,7 +966,7 @@
             });
             
             document.getElementById(sectionId).classList.add('active');
-            event.target.classList.add('active');
+            element.classList.add('active');
             
             if (sectionId === 'reports') {
                 updateReports();
